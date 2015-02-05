@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Directivas anidadas</title>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"></script>
+  <script>
+    'use strict'; 
+
+    angular.module('app', []) 
+    .directive('jvTwitter', function() {
+      return { 
+        restrict: "E",
+        scope : {
+          username : '='
+        },
+        template: '<a href="http://twitter.com/{{username}}">Twitter {{username}}</a>' 
+      }
+
+    })
+    .directive('jvVcard', function() {
+      return { 
+        restrict: "E",
+        // transclude permite incrustar el contenido de una directiva en otra
+        transclude: true,
+        scope : {
+          nombre    : '=', 
+          apellidos : '=', 
+          titulo    : '='
+        },
+        template: '<div><h1>{{nombre}} {{apellidos}}</h1><h2>{{titulo}}</h2><div ng-transclude></div></div>',
+        link: function(scope, element, attrs) {
+          element.find('img').css('border', '5px solid orange');
+        }
+      }
+
+    });
+  </script>
+
+</head>
+
+<body ng-app="app">
+  <div>
+  <p>
+    <!-- CUIDADO: los valores de los parámetros se evalúan, no te dejes las comillas simples. -->
+    <jv:vcard nombre="'Javi'" apellidos="'Moreno Muñoz'" titulo="'Robot Indestructible'">
+      <img src="http://www.gravatar.com/avatar/967d6cbb085cc21a9f8aa787590fa17a.png"
+           alt="profile picture">
+      <jv:twitter username="'ciberado'"></jv:twitter>
+    </jv:vcard>
+  </p>
+  </div>
+</body>
+
+</html>
